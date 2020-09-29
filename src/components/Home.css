@@ -7,7 +7,7 @@
   display: flex;
   place-items: center;
   flex-direction: column;
-  justify-content: space-evenly;
+  justify-content: space-between;
   background: url("https://b.zmtcdn.com/web_assets/81f3ff974d82520780078ba1cfbd453a1583259680.png");
   position: absolute;
   top: 0%;
@@ -18,7 +18,7 @@
   background-size: contain;
   opacity: 1;
   transition: all 1.4s ease 0s;
-  overflow: hidden;
+  overflow-x: hidden;
 }
 
 .home_root_header {
@@ -37,6 +37,10 @@
   font-style: normal;
 }
 
+.home_root_search_container {
+  margin-top: 5%;
+  margin-bottom: 35%;
+}
 .home_root_search {
   display: flex;
   align-items: center;
@@ -52,4 +56,27 @@
   padding: 0.8em !important;
   width: 41vw;
   border-radius: 0 1em 1em 0em !important;
+}
+
+.home_root_search_cityview {
+  padding: 0.8em;
+  margin-left: 5vw;
+  padding-top: 1.6em;
+  margin-top: -0.9em;
+  min-width: 9.3vw;
+  width: fit-content;
+  height: fit-content;
+  border-radius: 0.5em 0.5em 0.5em 0.5em;
+  background-color: whitesmoke;
+  color: grey;
+}
+
+.home_root_search_cityview:hover {
+  margin-top: 0.3vh;
+  margin-left: 6vw;
+  margin-bottom: 0.3vh;
+  background-color: aliceblue;
+  z-index: 1;
+  transform: scale(1.1);
+  cursor: pointer;
 }
