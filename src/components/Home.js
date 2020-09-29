@@ -5,7 +5,7 @@ import axios from "axios";
 import { InputBase } from "@material-ui/core";
 
 const config = {
-  headers: { "user-key": "8cd455d78407927ed585bf555240c308" },
+  headers: { "user-key": "" },
 };
 
 function Home() {
