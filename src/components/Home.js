@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./Home.css";
+import Card from "./Card";
 import axios from "axios";
 
 import { InputBase } from "@material-ui/core";
@@ -12,8 +13,10 @@ function Home() {
   const [cities, setCities] = useState([]);
   const [city, setCity] = useState({});
   const [citySelected, setCitySelected] = useState(false);
-
   const [cityInput, setCityInput] = useState("");
+
+  const [restaurants, setRestaurants] = useState([]);
+
   useEffect(() => {
     axios
       .get(
@@ -48,6 +51,15 @@ function Home() {
     setCity(item);
     setCitySelected(true);
     setCityInput("");
+    axios
+      .get(
+        `https://developers.zomato.com/api/v2.1/search?entity_id=${item.id}&entity_type=city`,
+        config
+      )
+      .then((res) => {
+        console.log(res);
+        setRestaurants(res.data.restaurants);
+      });
   }
 
   return (
@@ -55,11 +67,6 @@ function Home() {
       <h1 className="home_root_header">Zomato Clone</h1>
       <p className="home_root_helper">
         Discover the best food & drinks in{" "}
-        {/* {city.name
-          ? city.name.trim() == cityInput.trim()
-            ? "Your city"
-            : city.name
-          : "Your city"} */}
         {citySelected && city.name ? city.name : "Your city"}
       </p>
       <div className="home_root_search_container">
@@ -94,6 +101,11 @@ function Home() {
               </div>
             );
           })}
+      </div>
+      <div className="home_root_restaurants">
+        {restaurants.map((item, index) => {
+          return <Card key={index} {...item} />;
+        })}
       </div>
     </div>
   );
