@@ -5,12 +5,13 @@ import axios from "axios";
 import { InputBase } from "@material-ui/core";
 
 const config = {
-  headers: { "user-key": "" },
+  headers: { "user-key": "8cd455d78407927ed585bf555240c308" },
 };
 
 function Home() {
   const [cities, setCities] = useState([]);
   const [city, setCity] = useState({});
+  const [citySelected, setCitySelected] = useState(false);
 
   const [cityInput, setCityInput] = useState("");
   useEffect(() => {
@@ -38,12 +39,14 @@ function Home() {
     let val = event.target.value;
     if (event.key == "Enter" && val) {
       setCity({ ...city, name: val });
+      setCitySelected(false);
     }
   }
 
   function selectCity(item) {
     console.log("selected City " + item.name, item);
     setCity(item);
+    setCitySelected(true);
     setCityInput("");
   }
 
@@ -52,11 +55,12 @@ function Home() {
       <h1 className="home_root_header">Zomato Clone</h1>
       <p className="home_root_helper">
         Discover the best food & drinks in{" "}
-        {city.name
+        {/* {city.name
           ? city.name.trim() == cityInput.trim()
             ? "Your city"
             : city.name
-          : "Your city"}
+          : "Your city"} */}
+        {citySelected && city.name ? city.name : "Your city"}
       </p>
       <div className="home_root_search_container">
         <div className="home_root_search">
@@ -78,17 +82,18 @@ function Home() {
           </div>
           <br />
         </div>
-        {cities.map((item, index) => {
-          return (
-            <div
-              key={index}
-              onClick={() => selectCity(item)}
-              className="home_root_search_cityview"
-            >
-              {item.name}
-            </div>
-          );
-        })}
+        {!citySelected &&
+          cities.map((item, index) => {
+            return (
+              <div
+                key={index}
+                onClick={() => selectCity(item)}
+                className="home_root_search_cityview"
+              >
+                {item.name}
+              </div>
+            );
+          })}
       </div>
     </div>
   );
