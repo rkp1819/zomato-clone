@@ -2,26 +2,30 @@
   margin: 0;
   padding: 0;
 }
+.home_root_container {
+  max-width: fit-content;
+}
 .home_root {
   display: flex;
   flex-direction: column;
   background: url("https://b.zmtcdn.com/web_assets/81f3ff974d82520780078ba1cfbd453a1583259680.png");
   height: 100vh;
+
   width: 100vw;
   text-align: center;
   background-repeat: no-repeat;
-  background-size: contain;
+  background-size: cover;
   opacity: 1;
   transition: all 1.4s ease 0s;
-  overflow-x: auto;
+  overflow-x: hidden;
 }
 
 .home_root_header {
-  position: fixed;
+  position: relative;
   margin-top: 2% !important;
   margin-left: 50%;
   transform: translateX(-50%);
-  font-size: 3.8rem;
+  font-size: 3.8em;
   color: white;
   font-weight: 900;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
@@ -29,11 +33,11 @@
 }
 
 .home_root_helper {
-  position: fixed;
+  position: relative;
   margin-top: 8%;
   margin-left: 50%;
   transform: translateX(-50%);
-  font-size: 2.2rem;
+  font-size: 2.2em;
   color: white;
   font-weight: 500;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
@@ -41,7 +45,7 @@
 }
 
 .home_root_search_container {
-  position: fixed;
+  position: relative;
   margin-top: 15%;
   margin-left: 50%;
   transform: translateX(-50%);
@@ -88,14 +92,7 @@
 }
 
 .home_root_restaurants {
-  position: absolute;
-  margin-top: 20%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  place-items: center;
-  height: max-content;
-  width: 100vw;
-  overflow-x: auto;
-  overflow-y: auto;
+  max-width: 100vw;
+  padding: 2%;
+  padding-bottom: 2%;
 }

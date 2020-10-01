@@ -1,21 +1,29 @@
 import React, { useEffect, useState } from "react";
 import "./Home.css";
 import Card from "./Card";
+import FilterDialog from "./FilterDialog";
+// otherstuff
 import axios from "axios";
-
-import { InputBase } from "@material-ui/core";
+// mui
+import { InputBase, Toolbar, IconButton, Grid } from "@material-ui/core";
+import FilterListIcon from "@material-ui/icons/FilterList";
+// contextAPI
+import { useStateValue } from "../StateProvider";
+import { actionTypes } from "../reducer";
 
 const config = {
   headers: { "user-key": "8cd455d78407927ed585bf555240c308" },
 };
 
 function Home() {
-  const [cities, setCities] = useState([]);
   const [city, setCity] = useState({});
   const [citySelected, setCitySelected] = useState(false);
   const [cityInput, setCityInput] = useState("");
 
-  const [restaurants, setRestaurants] = useState([]);
+  const [
+    { cities, restaurants, filteredRestaurants, isRestaurantsFiltered },
+    dispatch,
+  ] = useStateValue();
 
   useEffect(() => {
     axios
@@ -24,7 +32,10 @@ function Home() {
         config
       )
       .then((res) => {
-        setCities(res.data.location_suggestions);
+        dispatch({
+          type: actionTypes.SET_CITIES,
+          cities: res.data.location_suggestions,
+        });
       })
       .catch((err) => {
         alert(err.msg);
@@ -51,6 +62,11 @@ function Home() {
     setCity(item);
     setCitySelected(true);
     setCityInput("");
+    dispatch({
+      type: "IS_RESTAURANTS_FILTERED",
+      isRestaurantsFiltered: false,
+    });
+
     axios
       .get(
         `https://developers.zomato.com/api/v2.1/search?entity_id=${item.id}&entity_type=city`,
@@ -58,55 +74,87 @@ function Home() {
       )
       .then((res) => {
         console.log(res);
-        setRestaurants(res.data.restaurants);
+        dispatch({
+          type: actionTypes.SET_RESTAURANTS,
+          restaurants: res.data.restaurants,
+        });
       });
   }
 
   return (
-    <div className="home_root">
-      <h1 className="home_root_header">Zomato Clone</h1>
-      <p className="home_root_helper">
-        Discover the best food & drinks in{" "}
-        {citySelected && city.name ? city.name : "Your city"}
-      </p>
-      <div className="home_root_search_container">
-        <div className="home_root_search">
-          <div className="home_root_search_cityselector">
-            <InputBase
-              autoFocus={true}
-              onKeyPress={changeCity}
-              placeholder="Location"
-              required={true}
-              value={cityInput ? cityInput : ""}
-              onChange={handleChangeCity}
-            />
+    <div className="home_root_container">
+      <div className="home_root">
+        <h1 className="home_root_header">Zomato Clone</h1>
+        <p className="home_root_helper">
+          Discover the best food & drinks in{" "}
+          {citySelected && city.name ? city.name : "Your city"}
+        </p>
+        <div className="home_root_search_container">
+          <div className="home_root_search">
+            <div className="home_root_search_cityselector">
+              <InputBase
+                autoFocus={true}
+                onKeyPress={changeCity}
+                placeholder="Location"
+                required={true}
+                value={cityInput ? cityInput : ""}
+                onChange={handleChangeCity}
+              />
+            </div>
+            <div className="home_root_search_bar">
+              <InputBase
+                placeholder="Search for restaurant, cuisine or a dish"
+                required={true}
+              />
+            </div>
+            <br />
           </div>
-          <div className="home_root_search_bar">
-            <InputBase
-              placeholder="Search for restaurant, cuisine or a dish"
-              required={true}
-            />
-          </div>
-          <br />
+          {!citySelected &&
+            cities.map((item, index) => {
+              return (
+                <div
+                  key={index}
+                  onClick={() => selectCity(item)}
+                  className="home_root_search_cityview"
+                >
+                  {item.name}
+                </div>
+              );
+            })}
         </div>
-        {!citySelected &&
-          cities.map((item, index) => {
-            return (
-              <div
-                key={index}
-                onClick={() => selectCity(item)}
-                className="home_root_search_cityview"
-              >
-                {item.name}
-              </div>
-            );
-          })}
       </div>
-      <div className="home_root_restaurants">
-        {restaurants.map((item, index) => {
-          return <Card key={index} {...item} />;
-        })}
-      </div>
+      {citySelected && (
+        <Toolbar>
+          <IconButton>
+            <FilterListIcon
+              onClick={() => {
+                dispatch({
+                  type: actionTypes.SET_OPENFILTER,
+                  openFilter: true,
+                });
+              }}
+            />
+            <FilterDialog />
+          </IconButton>
+        </Toolbar>
+      )}
+      <Grid container className={"home_root_restaurants"} spacing={2}>
+        {isRestaurantsFiltered
+          ? filteredRestaurants.map((item, index) => {
+              return (
+                <Grid key={index} item xs={12} md={4} sm={6}>
+                  <Card key={index} {...item} />
+                </Grid>
+              );
+            })
+          : restaurants.map((item, index) => {
+              return (
+                <Grid key={index} item xs={12} md={4} sm={6}>
+                  <Card key={index} {...item} />
+                </Grid>
+              );
+            })}
+      </Grid>
     </div>
   );
 }

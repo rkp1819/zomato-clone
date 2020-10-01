@@ -15,41 +15,53 @@ import FavoriteIcon from "@material-ui/icons/Favorite";
 import ShareIcon from "@material-ui/icons/Share";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    maxWidth: 345,
-    minWidth: "fit-content",
-    margin: "1em",
-  },
-  media: {
-    height: 0,
-    paddingTop: "56.25%", // 16:9
-  },
-  expand: {
-    transform: "rotate(0deg)",
-    marginLeft: "auto",
-    transition: theme.transitions.create("transform", {
-      duration: theme.transitions.duration.shortest,
-    }),
-  },
-  expandOpen: {
-    transform: "rotate(180deg)",
-  },
-  avatar: {
-    backgroundColor: red[500],
-  },
-}));
+import { Translate } from "@material-ui/icons";
 
 export default function RecipeReviewCard(props) {
+  const useStyles = makeStyles((theme) => ({
+    root: {
+      maxWidth: "100%",
+      minWidth: "100%",
+      height: "100%",
+      backgroundColor: "#" + props.restaurant.user_rating.rating_color,
+      "&:hover": {
+        transform: "scale(1.05)",
+        transition: "all 0.5s ease 0s",
+      },
+    },
+    media: {
+      height: 0,
+      paddingTop: "56.25%", // 16:9
+    },
+    expand: {
+      transform: "rotate(0deg)",
+      marginLeft: "auto",
+      transition: theme.transitions.create("transform", {
+        duration: theme.transitions.duration.shortest,
+      }),
+    },
+    expandOpen: {
+      transform: "rotate(180deg)",
+      transition: "all 1.0s ease 0s",
+    },
+    highlights: {
+      padding: "2%",
+      margin: "3%",
+    },
+    highlightsHeader: {
+      padding: "2%",
+      margin: "4%",
+      fontSize: "1.5rem",
+      backgroundColor: "gold",
+    },
+  }));
+
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
-
-  console.log("in CARD: " + require("util").inspect(props));
 
   return (
     <Card className={classes.root}>
@@ -61,12 +73,18 @@ export default function RecipeReviewCard(props) {
         }
         title={props.restaurant.name}
         subheader={
-          "average cost for two : " + props.restaurant.average_cost_for_two
+          "average cost for two : " +
+          props.restaurant.currency +
+          props.restaurant.average_cost_for_two
         }
       />
       <CardMedia
         className={classes.media}
-        image={props.restaurant.featured_image}
+        image={
+          props.restaurant.featured_image
+            ? props.restaurant.featured_image
+            : `https://source.unsplash.com/300x200/?cooked,food&sig={$Math.random()}`
+        }
         title={props.restaurant.timings}
       />
       <CardContent>
@@ -96,16 +114,17 @@ export default function RecipeReviewCard(props) {
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
-          <Paper elevation={5}>highlights:</Paper>
-          <Typography paragraph>
-            {props.restaurant.highlights.map((item, index) => {
-              return (
-                <Paper key={index} elevation={3}>
-                  {item}
-                </Paper>
-              );
-            })}
-          </Typography>
+          <Paper className={classes.highlightsHeader} elevation={5}>
+            Highlights
+          </Paper>
+
+          {props.restaurant.highlights.map((item, index) => {
+            return (
+              <Paper key={index} className={classes.highlights} elevation={3}>
+                {item}
+              </Paper>
+            );
+          })}
         </CardContent>
       </Collapse>
     </Card>
