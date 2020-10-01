@@ -152,18 +152,33 @@ export default function DialogSelect() {
                     category: val,
                   });
 
-                  axios
-                    .get(
-                      `https://developers.zomato.com/api/v2.1/search?entity_id=${city.id}&entity_type=city&category=${val}`,
-                      config
-                    )
-                    .then((res) => {
-                      console.log(res);
-                      dispatch({
-                        type: actionTypes.SET_RESTAURANTS,
-                        restaurants: res.data.restaurants,
+                  if (val != "") {
+                    axios
+                      .get(
+                        `https://developers.zomato.com/api/v2.1/search?entity_id=${city.id}&entity_type=city&category=${val}`,
+                        config
+                      )
+                      .then((res) => {
+                        console.log(res);
+                        dispatch({
+                          type: actionTypes.SET_RESTAURANTS,
+                          restaurants: res.data.restaurants,
+                        });
                       });
-                    });
+                  } else {
+                    axios
+                      .get(
+                        `https://developers.zomato.com/api/v2.1/search?entity_id=${city.id}&entity_type=city`,
+                        config
+                      )
+                      .then((res) => {
+                        console.log(res);
+                        dispatch({
+                          type: actionTypes.SET_RESTAURANTS,
+                          restaurants: res.data.restaurants,
+                        });
+                      });
+                  }
                 }}
                 input={<Input />}
               >
