@@ -16,12 +16,11 @@ const config = {
 };
 
 function Home() {
-  const [city, setCity] = useState({});
   const [citySelected, setCitySelected] = useState(false);
   const [cityInput, setCityInput] = useState("");
 
   const [
-    { cities, restaurants, filteredRestaurants, isRestaurantsFiltered },
+    { city, cities, restaurants, filteredRestaurants, isRestaurantsFiltered },
     dispatch,
   ] = useStateValue();
 
@@ -52,14 +51,14 @@ function Home() {
     console.log(event.key);
     let val = event.target.value;
     if (event.key == "Enter" && val) {
-      setCity({ ...city, name: val });
+      dispatch({ type: "SET_CITY", city: { ...city, name: val } });
       setCitySelected(false);
     }
   }
 
   function selectCity(item) {
     console.log("selected City " + item.name, item);
-    setCity(item);
+    dispatch({ type: "SET_CITY", city: item });
     setCitySelected(true);
     setCityInput("");
     dispatch({

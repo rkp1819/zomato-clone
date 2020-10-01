@@ -1,4 +1,5 @@
 export const initialState = {
+  city: {},
   cities: [],
   restaurants: [],
   openFilter: false,
@@ -11,6 +12,7 @@ export const initialState = {
 };
 
 export const actionTypes = {
+  SET_CITY: "SET_CITY",
   SET_CITIES: "SET_CITIES",
   SET_RESTAURANTS: "SET_RESTAURANTS",
   SET_OPENFILTER: "SET_OPENFILTER",
@@ -25,6 +27,11 @@ export const actionTypes = {
 const reducer = (state, action) => {
   console.log(action);
   switch (action.type) {
+    case actionTypes.SET_CITY:
+      return {
+        ...state,
+        city: action.city,
+      };
     case actionTypes.SET_CITIES:
       return {
         ...state,

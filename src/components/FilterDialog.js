@@ -11,6 +11,8 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 
+// otherstuff
+import axios from "axios";
 // contextAPI
 import { useStateValue } from "../StateProvider";
 import { actionTypes } from "../reducer";
@@ -27,10 +29,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const config = {
+  headers: { "user-key": "8cd455d78407927ed585bf555240c308" },
+};
+
 export default function DialogSelect() {
   const classes = useStyles();
   const [
     {
+      city,
       openFilter,
       restaurants,
       cuisines,
@@ -125,10 +132,23 @@ export default function DialogSelect() {
                 id="category-select"
                 value={category}
                 onChange={(e) => {
+                  let val = e.target.value;
                   dispatch({
                     type: "SET_CATEGORY",
-                    category: e.target.value,
+                    category: val,
                   });
+                  axios
+                    .get(
+                      `https://developers.zomato.com/api/v2.1/search?entity_id=${city.id}&entity_type=city&category=${val}`,
+                      config
+                    )
+                    .then((res) => {
+                      console.log(res);
+                      dispatch({
+                        type: actionTypes.SET_RESTAURANTS,
+                        restaurants: res.data.restaurants,
+                      });
+                    });
                 }}
                 input={<Input />}
               >
@@ -137,7 +157,7 @@ export default function DialogSelect() {
                 </MenuItem>
                 {categories.map((item, index) => {
                   return (
-                    <MenuItem key={index} value={item}>
+                    <MenuItem key={index} value={item.categories.id}>
                       {item.categories.name}
                     </MenuItem>
                   );
