@@ -45,6 +45,7 @@ export default function DialogSelect() {
       cuisine,
       category,
       filteredRestaurants,
+      isRestaurantsFiltered,
     },
     dispatch,
   ] = useStateValue();
@@ -60,6 +61,19 @@ export default function DialogSelect() {
       cuisines: ["Chinese", "North Indian"],
     });
   }, []);
+
+  React.useEffect(() => {
+    if (isRestaurantsFiltered) {
+      dispatch({
+        type: "SET_FILTERED_RESTAURANTS",
+        filteredRestaurants: restaurants.filter((item) => {
+          if (item.restaurant.cuisines.indexOf(cuisine) != -1) {
+            return item.restaurant;
+          }
+        }),
+      });
+    }
+  }, [restaurants]);
 
   return (
     <div>
@@ -137,6 +151,7 @@ export default function DialogSelect() {
                     type: "SET_CATEGORY",
                     category: val,
                   });
+
                   axios
                     .get(
                       `https://developers.zomato.com/api/v2.1/search?entity_id=${city.id}&entity_type=city&category=${val}`,
