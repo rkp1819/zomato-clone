@@ -78,6 +78,7 @@ const reducer = (state, action) => {
         ...state,
         isRestaurantsFiltered: action.isRestaurantsFiltered,
       };
+
     default:
       return state;
   }

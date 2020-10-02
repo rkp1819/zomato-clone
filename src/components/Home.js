@@ -12,7 +12,7 @@ import { useStateValue } from "../StateProvider";
 import { actionTypes } from "../reducer";
 
 const config = {
-  headers: { "user-key": "8cd455d78407927ed585bf555240c308" },
+  headers: { "user-key": "" },
 };
 
 function Home() {
@@ -115,6 +115,8 @@ function Home() {
                   key={index}
                   onClick={() => selectCity(item)}
                   className="home_root_search_cityview"
+                  tabindex={0}
+                  onKeyDown={() => selectCity(item)}
                 >
                   {item.name}
                 </div>
@@ -124,17 +126,17 @@ function Home() {
       </div>
       {citySelected && (
         <Toolbar>
-          <IconButton>
-            <FilterListIcon
-              onClick={() => {
-                dispatch({
-                  type: actionTypes.SET_OPENFILTER,
-                  openFilter: true,
-                });
-              }}
-            />
-            <FilterDialog />
+          <IconButton
+            onClick={() => {
+              dispatch({
+                type: actionTypes.SET_OPENFILTER,
+                openFilter: true,
+              });
+            }}
+          >
+            <FilterListIcon />
           </IconButton>
+          <FilterDialog />
         </Toolbar>
       )}
       <Grid container className={"home_root_restaurants"} spacing={2}>

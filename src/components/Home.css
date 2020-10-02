@@ -62,32 +62,28 @@
 }
 
 .home_root_search_bar > .MuiInputBase-root {
-  background-color: azure;
+  background-color: lightgoldenrodyellow;
   padding: 0.8em !important;
   width: 41vw;
+  color: darkslategray;
+
   border-radius: 0 1em 1em 0em !important;
 }
 
 .home_root_search_cityview {
   padding: 0.8em;
   margin-left: 5vw;
-  padding-top: 1.6em;
-  margin-top: -0.9em;
   min-width: 9.3vw;
   width: fit-content;
   height: fit-content;
-  border-radius: 0.5em 0.5em 0.5em 0.5em;
+  border-radius: 0.1em 0.1em 0.1em 0.1em;
   background-color: whitesmoke;
   color: grey;
 }
 
 .home_root_search_cityview:hover {
-  margin-top: 0.3vh;
-  margin-left: 6vw;
-  margin-bottom: 0.3vh;
-  background-color: aliceblue;
+  background-color: coral;
   z-index: 1;
-  transform: scale(1.1);
   cursor: pointer;
 }
 

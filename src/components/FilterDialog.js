@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const config = {
-  headers: { "user-key": "8cd455d78407927ed585bf555240c308" },
+  headers: { "user-key": "" },
 };
 
 export default function DialogSelect() {
@@ -73,6 +73,21 @@ export default function DialogSelect() {
         }),
       });
     }
+    if (restaurants.length > 0) {
+      dispatch({
+        type: "SET_CUISINES",
+        cuisines: Array.from(
+          new Set(
+            restaurants
+              .map((item, index) => {
+                return item.restaurant.cuisines;
+              })
+              .join(", ")
+              .split(", ")
+          )
+        ),
+      });
+    }
   }, [restaurants]);
 
   return (
@@ -88,7 +103,7 @@ export default function DialogSelect() {
           });
         }}
       >
-        <DialogTitle>Filter with</DialogTitle>
+        <DialogTitle>{`Filter Restaurants in ${city.name} with...`}</DialogTitle>
         <DialogContent>
           <form className={classes.container}>
             <FormControl className={classes.formControl}>
